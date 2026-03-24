@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQVH Quantum Secure Communication Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #001a4d;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #001a4d;
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav h1 {
+            font-size: 1.5rem;
+            color: #7c3aed;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        nav ul li a:hover {
+            background-color: #7c3aed;
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #001a4d 0%, #7c3aed 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        button {
+            background-color: #7c3aed;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #0891b2;
+            transform: scale(1.05);
+        }
+
+        /* Content Cards */
+        .card {
+            background: white;
+            border: 2px solid #7c3aed;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Expandable Content */
+        .expanded-content {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .expanded-content.active {
+            display: block;
+        }
+
+        /* Team Cards */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .team-card {
+            background: white;
+            border: 3px solid;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .team-card.saffan { border-color: #0066cc; }
+        .team-card.bhavya { border-color: #9933cc; }
+        .team-card.pallavi { border-color: #00aa66; }
+        .team-card.mohan { border-color: #ff9900; }
+        .team-card.prasanth { border-color: #00ccaa; }
+        .team-card.vinesh { border-color: #996633; }
+
+        .team-card h3 {
+            font-size: 1.3rem;
+            margin: 0.5rem 0;
+        }
+
+        .team-card .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8rem;
+            margin: 0.5rem 0;
+        }
+
+        .team-card.saffan .badge { background-color: #0066cc; }
+        .team-card.bhavya .badge { background-color: #9933cc; }
+        .team-card.pallavi .badge { background-color: #00aa66; }
+        .team-card.mohan .badge { background-color: #ff9900; }
+        .team-card.prasanth .badge { background-color: #00ccaa; }
+        .team-card.vinesh .badge { background-color: #996633; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: #ddd;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .close-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Architecture Layers */
+        .architecture-layer {
+            background: white;
+            border-left: 5px solid;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+
+        .architecture-layer.quantum { border-left-color: #0066cc; }
+        .architecture-layer.backend { border-left-color: #7c3aed; }
+        .architecture-layer.encryption { border-left-color: #10b981; }
+        .architecture-layer.ai { border-left-color: #ff9900; }
+        .architecture-layer.dashboard { border-left-color: #0891b2; }
+        .architecture-layer.defense { border-left-color: #dc2626; }
+
+        /* Process Flow */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .step-card {
+            background: white;
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .step-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .step-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Image Container */
+        .image-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #001a4d;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        h2 {
+            color: #7c3aed;
+            margin: 2rem 0 1rem 0;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <h1 onclick="showSection('home')">🚀 AQVH Quantum</h1>
+        <ul>
+            <li><a onclick="showSection('home')">Home</a></li>
+            <li><a onclick="showSection('quantum')">Quantum Computer</a></li>
+            <li><a onclick="showSection('architecture')">Architecture</a></li>
+            <li><a onclick="showSection('process')">Process Flow</a></li>
+            <li><a onclick="showSection('team')">Team</a></li>
+            <li><a onclick="showSection('contact')">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- HOME SECTION -->
+        <section id="home" class="active">
+            <div class="hero">
+                <h2>AQVH Quantum Secure Communication Platform</h2>
+                <p>Quantum Random Number Generator & Key Distribution for Defense Communications</p>
+                <p>Team: Hackathon Warriors | Amaravati Quantum Valley Hackathon 2025</p>
+                <div class="button-group">
+                    <button onclick="showSection('quantum')">🔬 Quantum Computer</button>
+                    <button onclick="showSection('architecture')">🏗️ Architecture</button>
+                    <button onclick="showSection('process')">⚙️ Process Flow</button>
+                    <button onclick="showSection('team')">👥 Team</button>
+                </div>
+            </div>
+
+            <h2>Project Overview</h2>
+            <div class="card">
+                <h3>About AQVH</h3>
+                <p>The AQVH Hackathon Warriors developed a cutting-edge Quantum Random Number Generator (QRNG) and Quantum Key Distribution (QKD) system specialized for defense communication security.</p>
+                <p>Our platform leverages quantum mechanical principles to provide unbreakable encryption resistant to future quantum computing threats.</p>
+                <p><strong>Duration:</strong> August 11, 2025 - October 28, 2025 (11 weeks)</p>
+                <p><strong>Team ID:</strong> 3C-31019</p>
+            </div>
+        </section>
+
+        <!-- QUANTUM COMPUTER SECTION -->
+        <section id="quantum">
+            <h2>How Quantum Computers Work</h2>
+
+            <div class="image-container">
+                <img src="https://www.internetvibes.net/wp-content/uploads/2023/05/IBM-Q-quantum-computer-CC-BY-SA-2.0-by-Lars-Plougmann.jpg" alt="IBM Quantum Computer">
+            </div>
+
+            <div class="card" onclick="toggleExpanded(this)">
+                <h3>⚛️ Classical vs Quantum Bits</h3>
+                <p>Classical Bit: Only 0 or 1 at any time</p>
+                <div class="expanded-content">
+                    <p><strong>Quantum Bit (Qubit):</strong> Can be 0, 1, or BOTH simultaneously (Superposition)</p>
+                    <p>This is why quantum computers are exponentially more powerful!</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="toggleExpanded(this)">
+                <h3>🌀 Superposition Explained</h3>
+                <p>Qubits exist in multiple states simultaneously...</p>
+                <div class="expanded-content">
+                    <p><strong>Mathematical representation:</strong> |ψ⟩ = α|0⟩ + β|1⟩</p>
+                    <p>This allows quantum computers to explore many solutions in parallel!</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="toggleExpanded(this)">
+                <h3>📏 Measurement & Collapse</h3>
+                <p>When measured, qubits collapse to either 0 or 1...</p>
+                <div class="expanded-content">
+                    <p>The outcome is truly random and probabilistic.</p>
+                    <p>This randomness is what we use for quantum cryptography!</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="toggleExpanded(this)">
+                <h3>🔧 Hadamard Gate (H)</h3>
+                <p>The gate that creates superposition from a ground state...</p>
+                <div class="expanded-content">
+                    <p><strong>Input:</strong> |0⟩ (qubit in ground state)</p>
+                    <p><strong>Output:</strong> (|0⟩ + |1⟩)/√2 (superposition)</p>
+                    <p>This is the MOST IMPORTANT gate for QRNG!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARCHITECTURE SECTION -->
+        <section id="architecture">
+            <h2>System Architecture</h2>
+            <p>Click on each layer to expand and see details:</p>
+
+            <div class="architecture-layer quantum" onclick="toggleExpanded(this)">
+                <h3>🔵 Layer 1: Quantum Core</h3>
+                <p>IBM Qiskit | QRNG | QKD Protocols (BB84, E91)</p>
+                <div class="expanded-content">
+                    <p><strong>Components:</strong></p>
+                    <ul style="text-align: left; margin-left: 1rem;">
+                        <li>QRNG circuits with Hadamard gates</li>
+                        <li>BB84 and E91 quantum key distribution</li>
+                        <li>Bell state preparation for entanglement</li>
+                        <li>CHSH inequality testing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="architecture-layer backend" onclick="toggleExpanded(this)">
+                <h3>🟣 Layer 2: Backend APIs (Flask)</h3>
+                <p>REST API Endpoints | JWT Authentication</p>
+                <div class="expanded-content">
+                    <p><strong>API Endpoints:</strong></p>
+                    <ul style="text-align: left; margin-left: 1rem;">
+                        <li>GET /rng - Generate random bits</li>
+                        <li>GET /qkd - Quantum key distribution</li>
+                        <li>POST /crypto/encrypt - Encrypt message</li>
+                        <li>POST /crypto/decrypt - Decrypt message</li>
+                        <li>GET /health - System status</li>
+                        <li>POST /ai/anomaly - Detect anomalies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="architecture-layer encryption" onclick="toggleExpanded(this)">
+                <h3>🟢 Layer 3: Encryption & Security</h3>
+                <p>AES-256-GCM | PBKDF2 | Key Rotation</p>
+                <div class="expanded-content">
+                    <p><strong>Security Features:</strong></p>
+                    <ul style="text-align: left; margin-left: 1rem;">
+                        <li>AES-256-GCM encryption algorithm</li>
+                        <li>PBKDF2 key derivation from quantum bits</li>
+                        <li>Automatic key rotation (every 1 hour)</li>
+                        <li>Perfect forward secrecy</li>
+                        <li>Compromised key quarantine</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="architecture-layer ai" onclick="toggleExpanded(this)">
+                <h3>🟠 Layer 4: AI Anomaly Detection</h3>
+                <p>Isolation Forest + LSTM | Real-time Monitoring</p>
+                <div class="expanded-content">
+                    <p><strong>Monitoring Metrics:</strong></p>
+                    <ul style="text-align: left; margin-left: 1rem;">
+                        <li>Entropy levels (target: > 0.99)</li>
+                        <li>QBER - Quantum Bit Error Rate (threshold: < 11%)</li>
+                        <li>Key generation rate</li>
+                        <li>API response times</li>
+                        <li>System health and resources</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="architecture-layer dashboard" onclick="toggleExpanded(this)">
+                <h3>🔵 Layer 5: Frontend Dashboard</h3>
+                <p>React + Plotly Dash | Real-time Visualization</p>
+                <div class="expanded-content">
+                    <p><strong>Dashboard Features:</strong></p>
+                    <ul style="text-align: left; margin-left: 1rem;">
+                        <li>Live entropy monitoring graphs</li>
+                        <li>QBER tracking</li>
+                        <li>Platform status display</li>
+                        <li>Threat alerts and notifications</li>
+                        <li>Historical analytics</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="architecture-layer defense" onclick="toggleExpanded(this)">
+                <h3>🔴 Layer 6: Defense Platforms</h3>
+                <p>Satellite | Naval | Airborne | Ground</p>
+                <div class="expanded-content">
+                    <p><strong>All platforms use AQVH quantum encryption:</strong></p>
+                    <ul style="text-align: left; margin-left: 1rem;">
+                        <li>🛰️ Satellite Communications - End-to-end encrypted</li>
+                        <li>🚢 Naval Communications - Ship-to-ship secure links</li>
+                        <li>✈️ Airborne Communications - Aircraft encrypted channels</li>
+                        <li>🏢 Ground Stations - Command center secure comms</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROCESS FLOW SECTION -->
+        <section id="process">
+            <h2>Complete Process Flow - 21 Steps</h2>
+            <p>Click on any step to see detailed information:</p>
+
+            <h3 style="color: #0066cc; margin-top: 2rem;">Phase 1: Quantum Fundamentals</h3>
+            <div class="process-steps">
+                <div class="step-card" style="border-color: #0066cc;" onclick="showModal('step1')">
+                    <div class="number">1</div>
+                    <div>Classical vs Quantum Bits</div>
+                </div>
+                <div class="step-card" style="border-color: #0066cc;" onclick="showModal('step2')">
+                    <div class="number">2</div>
+                    <div>Superposition</div>
+                </div>
+                <div class="step-card" style="border-color: #0066cc;" onclick="showModal('step3')">
+                    <div class="number">3</div>
+                    <div>Measurement & Collapse</div>
+                </div>
+            </div>
+
+            <h3 style="color: #9933cc; margin-top: 2rem;">Phase 2: Quantum Gates</h3>
+            <div class="process-steps">
+                <div class="step-card" style="border-color: #9933cc;" onclick="showModal('step4')">
+                    <div class="number">4</div>
+                    <div>Hadamard Gate</div>
+                </div>
+                <div class="step-card" style="border-color: #9933cc;" onclick="showModal('step5')">
+                    <div class="number">5</div>
+                    <div>CNOT & Entanglement</div>
+                </div>
+                <div class="step-card" style="border-color: #9933cc;" onclick="showModal('step6')">
+                    <div class="number">6</div>
+                    <div>QRNG Circuit</div>
+                </div>
+            </div>
+
+            <h3 style="color: #0891b2; margin-top: 2rem;">Phase 3: QRNG Implementation</h3>
+            <div class="process-steps">
+                <div class="step-card" style="border-color: #0891b2;" onclick="showModal('step7')">
+                    <div class="number">7</div>
+                    <div>QRNG Execution</div>
+                </div>
+                <div class="step-card" style="border-color: #0891b2;" onclick="showModal('step8')">
+                    <div class="number">8</div>
+                    <div>Entropy Calculation</div>
+                </div>
+                <div class="step-card" style="border-color: #0891b2;" onclick="showModal('step9')">
+                    <div class="number">9</div>
+                    <div>Quantum Noise & QBER</div>
+                </div>
+            </div>
+
+            <h3 style="color: #10b981; margin-top: 2rem;">Phase 4: QKD & Encryption</h3>
+            <div class="process-steps">
+                <div class="step-card" style="border-color: #10b981;" onclick="showModal('step10')">
+                    <div class="number">10</div>
+                    <div>BB84 Protocol</div>
+                </div>
+                <div class="step-card" style="border-color: #10b981;" onclick="showModal('step11')">
+                    <div class="number">11</div>
+                    <div>E91 Protocol</div>
+                </div>
+                <div class="step-card" style="border-color: #10b981;" onclick="showModal('step12')">
+                    <div class="number">12</div>
+                    <div>Encryption</div>
+                </div>
+            </div>
+
+            <h3 style="color: #ff9900; margin-top: 2rem;">Phase 5: AI Monitoring</h3>
+            <div class="process-steps">
+                <div class="step-card" style="border-color: #ff9900;" onclick="showModal('step13')">
+                    <div class="number">13</div>
+                    <div>Real-time Monitoring</div>
+                </div>
+                <div class="step-card" style="border-color: #ff9900;" onclick="showModal('step14')">
+                    <div class="number">14</div>
+                    <div>Anomaly Detection</div>
+                </div>
+                <div class="step-card" style="border-color: #ff9900;" onclick="showModal('step15')">
+                    <div class="number">15</div>
+                    <div>System Complete</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEAM SECTION -->
+        <section id="team">
+            <h2>Meet the Team</h2>
+            <p>Six brilliant minds building quantum-safe defense communications (Aug 11 - Oct 28, 2025)</p>
+
+            <div class="team-grid">
+                <div class="team-card saffan" onclick="showModal('saffan')">
+                    <h3>Saffan</h3>
+                    <div class="badge">AQVH SAFFAN</div>
+                    <p><strong>Quantum Lead</strong></p>
+                    <p>Designed quantum circuits and QKD protocols using IBM Qiskit</p>
+                    <button onclick="showModal('saffan'); event.stopPropagation();">View Journey</button>
+                </div>
+
+                <div class="team-card bhavya" onclick="showModal('bhavya')">
+                    <h3>Bhavya</h3>
+                    <div class="badge">AQVH BHAVYA</div>
+                    <p><strong>AI Anomaly Detector</strong></p>
+                    <p>Built ML models for real-time security monitoring</p>
+                    <button onclick="showModal('bhavya'); event.stopPropagation();">View Journey</button>
+                </div>
+
+                <div class="team-card pallavi" onclick="showModal('pallavi')">
+                    <h3>Pallavi</h3>
+                    <div class="badge">AQVH PALLAVI</div>
+                    <p><strong>Backend Expert</strong></p>
+                    <p>Architected Flask backend with secure APIs</p>
+                    <button onclick="showModal('pallavi'); event.stopPropagation();">View Journey</button>
+                </div>
+
+                <div class="team-card mohan" onclick="showModal('mohan')">
+                    <h3>Mohan</h3>
+                    <div class="badge">AQVH MOHAN</div>
+                    <p><strong>Frontend Designer</strong></p>
+                    <p>Created interactive real-time dashboards</p>
+                    <button onclick="showModal('mohan'); event.stopPropagation();">View Journey</button>
+                </div>
+
+                <div class="team-card prasanth" onclick="showModal('prasanth')">
+                    <h3>Prasanth</h3>
+                    <div class="badge">AQVH PRASANTH</div>
+                    <p><strong>Sustainability Specialist</strong></p>
+                    <p>Optimized performance and energy efficiency</p>
+                    <button onclick="showModal('prasanth'); event.stopPropagation();">View Journey</button>
+                </div>
+
+                <div class="team-card vinesh" onclick="showModal('vinesh')">
+                    <h3>Vinesh</h3>
+                    <div class="badge">AQVH VINESH</div>
+                    <p><strong>Documentation Lead</strong></p>
+                    <p>Led patents and technical documentation</p>
+                    <button onclick="showModal('vinesh'); event.stopPropagation();">View Journey</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <div class="card">
+                <h3>Connect with Hackathon Warriors</h3>
+                <p><strong>Email:</strong> hackathonwarriors150@gmail.com</p>
+                <p><strong>GitHub:</strong> <a href="https://github.com/Anwarsaffan58/AQVH-Hackathon-Warriors" target="_blank">github.com/Anwarsaffan58/AQVH-Hackathon-Warriors</a></p>
+                <p><strong>Hackathon:</strong> Amaravati Quantum Valley Hackathon 2025</p>
+                <p><strong>Team ID:</strong> 3C-31019</p>
+                <p><strong>Duration:</strong> August 11, 2025 - October 28, 2025</p>
+                <p><strong>Status:</strong> ✅ PROVISIONAL PATENT FILED</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="stepModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <h2 id="modalTitle">Step Details</h2>
+            <p id="modalContent">Details will appear here...</p>
+        </div>
+    </div>
+
+    <div id="teamModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <h2 id="teamModalTitle">Team Member Journey</h2>
+            <div id="teamModalContent"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>AQVH Hackathon Warriors | Quantum Secure Communication Platform 2025</p>
+        <p>Amaravati Quantum Valley Hackathon | Team ID: 3C-31019</p>
+    </footer>
+
+    <script>
+        // Show Section
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Toggle Expanded Content
+        function toggleExpanded(element) {
+            const expanded = element.querySelector('.expanded-content');
+            if (expanded) {
+                expanded.classList.toggle('active');
+            }
+        }
+
+        // Show Modal for Steps
+        function showModal(step) {
+            const modal = document.getElementById('stepModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            const stepData = {
+                step1: {
+                    title: 'Classical Bits vs Quantum Bits',
+                    content: 'Classical Bit: Only 0 or 1 at any time. Quantum Bit (Qubit): Can be 0, 1, or BOTH simultaneously (Superposition). This is why quantum computers are exponentially more powerful!'
+                },
+                step2: {
+                    title: 'Superposition Explained',
+                    content: 'Qubits exist in multiple states simultaneously. Mathematical representation: |ψ⟩ = α|0⟩ + β|1⟩. This allows quantum computers to explore many solutions in parallel!'
+                },
+                step3: {
+                    title: 'Measurement & Collapse',
+                    content: 'When measured, qubits collapse to either 0 or 1. The outcome is truly random and probabilistic. This randomness is what we use for quantum cryptography!'
+                },
+                saffan: {
+                    title: 'Saffan - Quantum Lead (Aug 11 - Oct 28, 2025)',
+                    content: `<strong>Week-by-Week Journey:</strong>
+                    <ul style="text-align: left;">
+                        <li><strong>Weeks 1-3:</strong> Foundation, QRNG implementation, BB84 protocol</li>
+                        <li><strong>Weeks 4-5:</strong> E91 protocol, circuit optimization (40% improvement)</li>
+                        <li><strong>Weeks 6-7:</strong> Testing and integration</li>
+                        <li><strong>Weeks 8-11:</strong> Refinement, performance tuning, final demo prep</li>
+                    </ul>
+                    <p><strong>Contributions:</strong> 1,630 lines of quantum code</p>
+                    <p><strong>Technologies:</strong> IBM Qiskit, Python, NumPy, Quantum Cryptography</p>
+                    <p><strong>Key Achievements:</strong> CHSH value > 2.4, QBER < 8%, Entropy > 0.99`
+                },
+                bhavya: {
+                    title: 'Bhavya - AI Anomaly Detector (Aug 11 - Oct 28, 2025)',
+                    content: `<strong>Week-by-Week Journey:</strong>
+                    <ul style="text-align: left;">
+                        <li><strong>Weeks 1-2:</strong> ML fundamentals, anomaly detection research</li>
+                        <li><strong>Weeks 3-4:</strong> Isolation Forest and LSTM implementation</li>
+                        <li><strong>Weeks 5-6:</strong> Model optimization and dashboard integration</li>
+                        <li><strong>Weeks 7-11:</strong> Testing, refinement, performance tuning</li>
+                    </ul>
+                    <p><strong>Contributions:</strong> 1,440 lines of ML code</p>
+                    <p><strong>Final Metrics:</strong> 92% accuracy, 89% precision, 95% recall, < 5% false positives`
+                },
+                pallavi: {
+                    title: 'Pallavi - Backend Expert (Aug 11 - Oct 28, 2025)',
+                    content: `<strong>Week-by-Week Journey:</strong>
+                    <ul style="text-align: left;">
+                        <li><strong>Weeks 1-2:</strong> API architecture and core endpoint development</li>
+                        <li><strong>Weeks 3-4:</strong> Encryption pipeline and key management</li>
+                        <li><strong>Weeks 5-6:</strong> Security hardening and performance optimization</li>
+                        <li><strong>Weeks 7-11:</strong> Integration testing and deployment</li>
+                    </ul>
+                    <p><strong>Contributions:</strong> 2,030 lines of backend code</p>
+                    <p><strong>Performance:</strong> < 50ms response time, 2000 requests/second throughput`
+                },
+                mohan: {
+                    title: 'Mohan - Frontend Designer (Aug 11 - Oct 28, 2025)',
+                    content: `<strong>Week-by-Week Journey:</strong>
+                    <ul style="text-align: left;">
+                        <li><strong>Weeks 1-2:</strong> UI/UX design and React setup</li>
+                        <li><strong>Weeks 3-4:</strong> Dashboard components and visualization</li>
+                        <li><strong>Weeks 5-6:</strong> Real-time features and responsive design</li>
+                        <li><strong>Weeks 7-11:</strong> Polish, UX enhancement, final testing</li>
+                    </ul>
+                    <p><strong>Contributions:</strong> 2,300 lines of frontend code</p>
+                    <p><strong>Features:</strong> 60 FPS animations, 5+ visualization types, mobile responsive`
+                },
+                prasanth: {
+                    title: 'Prasanth - Sustainability Specialist (Aug 11 - Oct 28, 2025)',
+                    content: `<strong>Week-by-Week Journey:</strong>
+                    <ul style="text-align: left;">
+                        <li><strong>Weeks 1-2:</strong> Performance baseline and optimization analysis</li>
+                        <li><strong>Weeks 3-4:</strong> Circuit optimization and scalability analysis</li>
+                        <li><strong>Weeks 5-7:</strong> Energy efficiency and load testing</li>
+                        <li><strong>Weeks 8-11:</strong> Documentation and roadmap creation</li>
+                    </ul>
+                    <p><strong>Achievements:</strong> 40% performance improvement, 1 Mbps key rate design</p>
+                    <p><strong>Impact:</strong> Scalable, sustainable quantum system`
+                },
+                vinesh: {
+                    title: 'Vinesh - Documentation Lead (Aug 11 - Oct 28, 2025)',
+                    content: `<strong>Week-by-Week Journey:</strong>
+                    <ul style="text-align: left;">
+                        <li><strong>Weeks 1-2:</strong> Documentation planning and structure</li>
+                        <li><strong>Weeks 3-4:</strong> Technical writing and user manual (50 pages)</li>
+                        <li><strong>Weeks 5-6:</strong> Presentation design (30 slides) and poster</li>
+                        <li><strong>Weeks 7-11:</strong> Patent documentation and finalization</li>
+                    </ul>
+                    <p><strong>Deliverables:</strong> 200+ pages of documentation</p>
+                    <p><strong>Status:</strong> ✅ PROVISIONAL PATENT FILED`
+                }
+            };
+
+            if (stepData[step]) {
+                title.textContent = stepData[step].title;
+                content.innerHTML = stepData[step].content;
+                modal.classList.add('active');
+            }
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('stepModal').classList.remove('active');
+            document.getElementById('teamModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const stepModal = document.getElementById('stepModal');
+            const teamModal = document.getElementById('teamModal');
+            if (event.target === stepModal) stepModal.classList.remove('active');
+            if (event.target === teamModal) teamModal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
